@@ -34,7 +34,7 @@ my-app/
   next.config.js
   components/
     head.js
-    nav.js
+    nav.jsx
   pages/
     index.js
   static/
