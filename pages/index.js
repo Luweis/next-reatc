@@ -1,3 +1,4 @@
+import React from 'react';
 import Link from 'next/link'
 import { Row, Col, Carousel } from 'antd';
 import styled from 'styled-components';
@@ -11,7 +12,8 @@ import Question from '../components/question';
 import Mark from '../components/mark';
 import Footer from '../components/footer';
 import Shop from  '../components/shop';
-import { sizes } from "../utils/constant";
+import { sizes, urls } from "../utils/constant";
+import 'isomorphic-unfetch';
 
 const title = '布谷医生-在线骨科诊断|治疗|用药专家';
 const imgs = [
@@ -54,88 +56,104 @@ const SecrionRow = styled(Row)`
   margin: ${`${sizes.sectionMargin} 0`}
 `;
 
-export default () => (
-  <div className="container">
-    <Head title={title} />
-    <Nav />
-    <main>
-      {/*左侧*/}
+export default class extends React.Component {
 
-      <Row>
-        <Col xs={24} lg={16}>
-          <Row >
-            {/*banner*/}
-            <Col xs={24} lg={22}>
-              <Carousel autoplay>
-                {imgs.map((img) => (
-                  <div key={img}><img src={img} style={{width: '100%'}}/></div>
-                ))}
-              </Carousel>
-              {/*咨询医生*/}
-              <Row style={{paddingBottom: '20px',margin: `${sizes.sectionMargin} 0`}}>
-                <Col xs={24} lg={11} style={{paddingTop: '20px'}}>
-                  <Consultation />
-                </Col>
-                <Col xs={24} lg={11} style={{paddingTop: '20px'}}>
-                  <Consultation />
-                </Col>
-              </Row>
-              <SecrionRow >
-                <Tip dataSource={questionTps}/>
-              </SecrionRow>
-              <Row style={{margin: '40px 0'}}>
-                <SearchBar />
-                <div>
-                  <Recommend />
-                </div>
-              </Row>
-              <SecrionRow >
-                <Tip dataSource={appointment}/>
-              </SecrionRow>
-              <Row>
-                <SearchBar/>
-                <SecrionRow>
-                  <Recommend />
-                </SecrionRow>
-              </Row>
-              {/*经典问答*/}
-              <SecrionRow >
-                <Tip dataSource={classic}/>
-              </SecrionRow>
+  static async getInitialProps () {
+    const res = await fetch(`${urls.base}index/getBannerResources`,{ method: 'POST'})
+    const json = await res.json()
+    return {
+      imgs: json.resultBodyObject
+    }
+  }
 
-              <SecrionRow>
-                <Question />
-                <Question />
-              </SecrionRow>
+  render() {
+    return (
+     <div>
+       <div className="container">
+         <Head title={title} />
+         <Nav />
+         <main>
+           {/*左侧*/}
 
-              {/*疾病库*/}
-              <SecrionRow>
-                <Tip dataSource={knowledge}/>
-                <SecrionRow>
-                  <h4>常见疾病</h4>
-                  <Mark/>
-                </SecrionRow>
-              </SecrionRow>
-            </Col>
-          </Row>
-        </Col>
+           <Row>
+             <Col xs={24} md={14} lg={16}>
+               <Row >
+                 {/*banner*/}
+                 <Col xs={24} md={22} lg={22}>
+                   <Carousel autoplay>
+                     {this.props.imgs.map((img) => (
+                       <div key={img.resourceUrl}><img src={img.resourceUrl} style={{width: '100%'}}/></div>
+                     ))}
+                   </Carousel>
+                   {/*咨询医生*/}
+                   <Row style={{paddingBottom: '20px',margin: `${sizes.sectionMargin} 0`}}>
+                     <Col xs={24} lg={11} style={{paddingTop: '20px'}}>
+                       <Consultation />
+                     </Col>
+                     <Col xs={24} lg={11} style={{paddingTop: '20px'}}>
+                       <Consultation />
+                     </Col>
+                   </Row>
+                   <SecrionRow >
+                     <Tip dataSource={questionTps}/>
+                   </SecrionRow>
+                   <Row style={{margin: '40px 0'}}>
+                     <SearchBar />
+                     <div>
+                       <Recommend />
+                     </div>
+                   </Row>
+                   <SecrionRow >
+                     <Tip dataSource={appointment}/>
+                   </SecrionRow>
+                   <Row>
+                     <SearchBar/>
+                     <SecrionRow>
+                       <Recommend />
+                     </SecrionRow>
+                   </Row>
+                   {/*经典问答*/}
+                   <SecrionRow >
+                     <Tip dataSource={classic}/>
+                   </SecrionRow>
 
-        {/*右侧*/}
-        <Col xs={24} lg={8}>
-          {/*商城*/}
-         <div>
-           <Tip dataSource={shop}/>
-           <Shop />
-         </div>
+                   <SecrionRow>
+                     <Question />
+                     <Question />
+                   </SecrionRow>
 
-         {/* 布骨健康*/}
+                   {/*疾病库*/}
+                   <SecrionRow>
+                     <Tip dataSource={knowledge}/>
+                     <SecrionRow>
+                       <h4>常见疾病</h4>
+                       <Mark/>
+                     </SecrionRow>
+                   </SecrionRow>
+                 </Col>
+               </Row>
+             </Col>
 
-         {/*<div>*/}
-           {/*<Tip dataSource={health}/>*/}
-         {/*</div>*/}
-        </Col>
-      </Row>
-    </main>
-    <Footer />
-  </div>
-)
+             {/*右侧*/}
+             <Col xs={24} md={10} lg={8} >
+               {/*商城*/}
+               <div>
+               <Tip dataSource={shop}/>
+               <Shop />
+               </div>
+
+               {/* 布骨健康*/}
+
+               {/*<div>*/}
+               {/*<Tip dataSource={health}/>*/}
+               {/*</div>*/}
+             </Col>
+           </Row>
+         </main>
+       </div>
+       <Footer />
+     </div>
+    )
+  }
+}
+

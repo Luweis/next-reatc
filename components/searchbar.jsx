@@ -5,15 +5,23 @@ import { Row, Col } from 'antd';
 import {sizes, colors, fontSizes} from '../utils/constant';
 
 const Wrap = styled.div`
+  display: flex;
   padding: 20px 0;
+   @media(max-width: 600px){
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  min-width: 210px;
+  margin-right: 30px;
+  
   & > img {
-    height: 50px;
+    height: 40px;
   }
   & > div {
     flex: 1;
@@ -32,11 +40,16 @@ const Header = styled.div`
 
 const Search = styled.div`
   display: flex;
-  align-items: center;
+  flex: 1;
   align-items: center;
   height: 40px;
   border-radius: 23px;
   border: 1px solid ${colors.dar3};
+  @media(max-width: 600px){
+    flex: 0 0 80%;
+    margin-top: 30px;
+    max-width: 400px;
+  }
   & > img {
     height: 80%;
     margin-left: 18px;
@@ -66,24 +79,18 @@ const SearBtn = styled.span`
 function SearchBar({dataSource}) {
   return (
     <Wrap>
-     <Row>
-       <Col xs={24} lg={10}>
-         <Header>
-           <img src={dataSource.source}/>
-           <div>
-             <div>{dataSource.title}</div>
-             <span>{dataSource.desc}</span>
-           </div>
-         </Header>
-       </Col>
-       <Col xs={24} lg={14} style={{textAlign: 'center'}}>
-       <Search>
-         <img src='../static/icon-search.png'/>
-         <input type='search'placeholder={dataSource.placeholder} />
-         <SearBtn>搜索</SearBtn>
-       </Search>
-       </Col>
-     </Row>
+      <Header>
+        <img src={dataSource.source}/>
+        <div>
+          <div>{dataSource.title}</div>
+          <span>{dataSource.desc}</span>
+        </div>
+      </Header>
+      <Search>
+        <img src='../static/icon-search.png'/>
+        <input type='search'placeholder={dataSource.placeholder} />
+        <SearBtn>搜索</SearBtn>
+      </Search>
     </Wrap>
   )
 }

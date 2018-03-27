@@ -18,3 +18,7 @@ export const sizes = {
   navHeight: '45px',
   sectionMargin: '45px',
 }
+
+export const urls = {
+  base: 'https://www.drbugu.com/drbugu/mainSite/door/api/',
+}
